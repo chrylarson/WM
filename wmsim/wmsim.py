@@ -66,13 +66,13 @@ def readTag():
         if  int(myTagDic['type']) == 1:
             wm_global.devicesList.append(Controls.Device(myTagDic.copy()))
         elif int(myTagDic['type']) == 2:
-            wm_global.devicesList.append(Controls.Pump(myTagDic.copy()))
+            wm_global.devicesList.append(Controls.Pump_2(myTagDic.copy()))
         elif int(myTagDic['type']) == 3:
             wm_global.devicesList.append(Controls.Pump_3(myTagDic.copy()))
         else:
             print "Errore del cazzo"
 
-#=== main ================================================================
+#=== main ======================================================================
 
 # read ini file
 # add parse for OPC module

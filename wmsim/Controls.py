@@ -4,9 +4,7 @@ import datetime
 import pythonprog
 import wm_global
 
-print
-
-#=== CLASS DEVICE ==============================================================
+#=== CLASS DEVICE Valve Device Type 1 ==========================================
 class Device(object):
     # to avoid sharing between objects
     #step = 0
@@ -83,10 +81,10 @@ class Device(object):
         return int(self.step)
 
 #=== Pump Device Type 2 ========================================================
-class Pump(Device):
+class Pump_2(Device):
     def __init__(self, deviceTags):
         # Calling the super init
-        super(Pump, self).__init__(deviceTags)
+        super(Pump_2, self).__init__(deviceTags)
 
     # the working method
     def run(self):
@@ -128,16 +126,47 @@ class Pump(Device):
 
 
 #=== PUMP Device Type 3 ========================================================
-class Pump_3(Pump):
+class Pump_3(Pump_2):
     def __init__(self, deviceTags):
         # Calling the super init
-        super(Pump, self).__init__(deviceTags)
+        super(Pump_2, self).__init__(deviceTags)
 
     def devInit(self):
         # initial condition for the pump
         # auto, not fault, not running and not ohigh temp
         self.write(self.deviceTags['s_msh'],0)
         super(Pump_3, self).devInit()
+
+#=== Valve_4 Device Type 4 ========================================================
+class Valve_4(Device):
+    def __init__(self, deviceTags):
+        # Calling the super init
+        super(Valve_4, self).__init__(deviceTags)
+
+    # the working method
+    def run(self):
+        # Set intial device condition
+        if self.initDone == 0 :
+            self.devInit()
+            self.initDone = 1
+        # Get actual time
+        self.now1 = self.now()
+
+        # discrete cmd to close overide analog out
+        time.sleep(1)
+
+        if int( wm_global.config['verbose'])== 1:
+            self.info()
+
+    def devInit(self):
+        # initial condition for the valve
+        # remote, closed and not open
+        self.write(self.deviceTags['s_remote'], 1)
+        self.write(self.deviceTags['s_closed'], 0)
+        self.write(self.deviceTags['s_opend'], 1)
+        self.write(self.deviceTags['s_pos_fbk'], 0)
+        print "Device %s initialized" %( self.deviceTags['name'])
+
 
 #=== SIMULATION ================================================================
 
